@@ -1,5 +1,5 @@
 import json
-from scrapeutils import utils
+from pgascraper.src.scrapeutils import utils
 import requests
 
 

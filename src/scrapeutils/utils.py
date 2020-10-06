@@ -1,10 +1,45 @@
 import requests
 import collections
+from pgascraper.src.scrapeutils import pgatour
 from datetime import datetime as dt
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
 
+
+def scrape():
+    MAJOR_TOURNAMENT_NAMES = ['Masters Tournament',
+                              'U.S. Open',
+                              'The Open Championship',
+                              'PGA Championship',
+                              'THE PLAYERS Championship']
+
+    tournament = get_current_tournament()
+    tournament_urls = get_urls(tournament)
+    tournament_data = parse_json(tournament_urls)
+
+    t_name = tournament['trnName']['official']
+    if t_name == 'Masters Tournament':
+        t = masters.scrape(leaderboard)
+
+    elif t_name == 'U.S. Open':
+        tee_times_url = 'https://gripapi-static-pd.usopen.com/gripapi/teetimes.json'
+        tee_times = parse_json(tee_times_url)
+        t = usopen.scrape(leaderboard, tee_times)
+
+    elif t_name == 'The Open Championship':
+        t = open.scrape(leaderboard)
+
+    elif t_name == 'PGA Championship':
+        t = pga.scrape(leaderboard)
+
+    elif t_name == 'THE PLAYERS Championship':
+        t = players.scrape(leaderboard)
+
+    else:
+        t = pgatour.scrape(tournament_data[0])
+
+    return t
 
 
 def get_current_tournament():
@@ -31,18 +66,19 @@ def get_current_tournament():
     return current_week_tournament
 
 
-def get_json_url(tournament):
+def get_urls(tournament):
+    urls = []
     leaderboard_url = 'https://www.pgatour.com/leaderboard.html'
     tournament_name = tournament['trnName']['official']
     tournament_id = tournament['permNum']
     tournament_year = tournament['year']
-    tournament_name = 'U.S. Open'
+    # tournament_name = 'U.S. Open'
     print('Processing json for {}\n'.format(tournament_name))
     if tournament_name == 'Masters Tournament':
         return
     elif tournament_name == 'U.S. Open':
-        json_url = 'https://gripapi-static-pd.usopen.com/gripapi/leaderboard.json'
-        json_url = 'https://gripapi-static-pd.usopen.com/gripapi/teetimes.json'
+        urls.append('https://gripapi-static-pd.usopen.com/gripapi/leaderboard.json')
+        urls.append('https://gripapi-static-pd.usopen.com/gripapi/teetimes.json')
     elif tournament_name == 'The Open Championship':
         return
     elif tournament_name == 'PGA Championship':
@@ -55,7 +91,7 @@ def get_json_url(tournament):
         options.headless = True
         cap = DesiredCapabilities.CHROME
         cap['goog:loggingPrefs'] = {'performance': 'ALL'}
-        driver = webdriver.Chrome('scrapeutils/chromedriver', desired_capabilities=cap, options=options)
+        driver = webdriver.Chrome('/Users/nickmartin/projects/python/pgascraper/src/scrapeutils/chromedriver', desired_capabilities=cap, options=options)
 
         # record and parse performance log
         driver.get(leaderboard_url)
@@ -78,15 +114,18 @@ def get_json_url(tournament):
         end_acl_idx = log[0].find(end_acl_str)
         user_id = log[0][id_idx + len(id_str) : acl_idx]
         acl = log[0][acl_idx + len(acl_str) : end_acl_idx]
-        json_url = '{}/{}/{}/leaderboard-v2.json?{}{}{}{}'.format(base, tournament_id, tournament_year, id_str, user_id, acl_str, acl)
+        urls.append('{}/{}/{}/leaderboard-v2.json?{}{}{}{}'.format(base, tournament_id, tournament_year, id_str, user_id, acl_str, acl))
 
-    return json_url
+    return urls
 
 
-def get_json(url):
-    f = requests.get(url)
-    return f.json()
+def parse_json(urls):
+    data = []
+    for url in urls:
+        f = requests.get(url)
+        data.append(f.json())
 
+    return data
 
 
 
