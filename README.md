@@ -10,7 +10,8 @@ Usage
 
 Structures
 ==========
-Tournament  
+Tournament
+----------  
 	- name: str  
 	- par: str  
 	- current_round: int  
@@ -21,7 +22,7 @@ Tournament
 	- players: dict of Golfers  
   
 Golfer
-======
+------
 	- status: str  
 	- current_round: int  
 	- thru: TBD ('None' until tournament starts)  
@@ -31,17 +32,8 @@ Golfer
 	- rounds: list of Rounds  
 
 Round
-=====
+-----
 	- strokes: TBD ('None' until tournament starts)
 	- to_par: yet to be defined
 	- tee_time: str  
-
-
-A Sub-Section
--------------
-
-<here is a subsection>
-Numbered list:
-1. hello
-2. goodbye
 
