@@ -1,6 +1,6 @@
 import requests
 import collections
-from pgascraper.src.scrapeutils import pgatour
+from scrapeutils import pgatour
 from datetime import datetime as dt
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -91,7 +91,7 @@ def get_urls(tournament):
         options.headless = True
         cap = DesiredCapabilities.CHROME
         cap['goog:loggingPrefs'] = {'performance': 'ALL'}
-        driver = webdriver.Chrome('/Users/nickmartin/projects/python/pgascraper/src/scrapeutils/chromedriver', desired_capabilities=cap, options=options)
+        driver = webdriver.Chrome('/Users/nickmartin/projects/python/scrapeutils/chromedriver', desired_capabilities=cap, options=options)
 
         # record and parse performance log
         driver.get(leaderboard_url)

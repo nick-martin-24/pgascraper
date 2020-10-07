@@ -1,6 +1,6 @@
 import json
-from pgascraper.src.scrapeutils import utils
 import requests
+from scrapeutils import utils
 
 
 def scrape(json):
