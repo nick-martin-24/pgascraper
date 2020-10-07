@@ -25,10 +25,10 @@ def scrape(json):
         t['players'][name] = {}
         t['players'][name]['status'] = player['status']
         t['players'][name]['current_round'] = player['current_round']
-        t['players'][name]['thru'] = ['thru']
-        t['players'][name]['today'] = ['today']
-        t['players'][name]['total'] = ['total']
-        t['players'][name]['total_strokes'] = ['total_strokes']
+        t['players'][name]['thru'] = player['thru']
+        t['players'][name]['today'] = player['today']
+        t['players'][name]['total'] = player['total']
+        t['players'][name]['total_strokes'] = player['total_strokes']
         t['players'][name]['rounds'] = []
 
         for round in player['rounds']:

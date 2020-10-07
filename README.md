@@ -11,31 +11,30 @@ Usage
 Structures
 ==========
 Tournament  
-	- par:  
-	- current_round: str  
-	- tournament_name: str  
-	- is_started: str  
-	- is_finished: str  
+	- name: str  
+	- par: str  
+	- current_round: int  
+	- is_started: bool  
+	- is_finished: bool  
 	- round_state: str  
 	- cut_line: int (converted from str)  
 	- players: dict of Golfers  
   
 Golfer
 ======
-	- name: str  
 	- status: str  
-	- thru: str  
-	- current_round: str  
-	- today:  
-	- total:  
-	- total_strokes:  
+	- current_round: int  
+	- thru: TBD ('None' until tournament starts)  
+	- today: TBD ('None' until tournament starts)  
+	- total:  int  
+	- total_strokes: TBD ('None' until tournamnet starts)
 	- rounds: list of Rounds  
 
 Round
 =====
-	- strokes
-	- to_par
-	- tee_time
+	- strokes: TBD ('None' until tournament starts)
+	- to_par: yet to be defined
+	- tee_time: str  
 
 
 A Sub-Section
