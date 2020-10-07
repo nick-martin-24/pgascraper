@@ -1,4 +1,4 @@
-# pgascraper
+# scrapeutils
 
 Setup
 =========
