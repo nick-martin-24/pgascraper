@@ -27,7 +27,7 @@ Golfer
 	- current_round: int  
 	- thru: TBD ('None' until tournament starts)  
 	- today: TBD ('None' until tournament starts)  
-	- total:  int  
+	- total: int  
 	- total_strokes: TBD ('None' until tournamnet starts)
 	- rounds: list of Rounds  
 
