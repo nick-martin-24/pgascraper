@@ -1,5 +1,5 @@
 import json
-from scrapeutils import utils
+import utils
 import requests
 
 

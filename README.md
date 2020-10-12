@@ -13,12 +13,15 @@ Structures
 Tournament
 ----------  
 	- name: str  
+	- setup_year: str
+	- actual_year: int
 	- par: str  
 	- current_round: int  
 	- is_started: bool  
 	- is_finished: bool  
 	- round_state: str  
 	- cut_line: int (converted from str)  
+	- penalty: int (initialized to None)  
 	- players: dict of Golfers  
   
 Golfer
@@ -26,7 +29,7 @@ Golfer
 	- status: str  
 	- current_round: int  
 	- thru: TBD ('None' until tournament starts)  
-	- today: TBD ('None' until tournament starts)  
+	- today: str ('None' until tournament starts)  
 	- total: int  
 	- total_strokes: TBD ('None' until tournamnet starts)
 	- rounds: list of Rounds  

@@ -1,4 +1,5 @@
 import requests
+import datetime
 import collections
 from scrapeutils import pgatour
 from datetime import datetime as dt
@@ -31,13 +32,53 @@ def scrape():
         t = open.scrape(leaderboard)
 
     elif t_name == 'PGA Championship':
-        t = pga.scrape(leaderboard)
+        t = pga.scrape_leaderboard(leaderboard)
 
     elif t_name == 'THE PLAYERS Championship':
         t = players.scrape(leaderboard)
 
     else:
-        t = pgatour.scrape(tournament_data[0])
+        if len(tournament_data) != 0:
+            t = pgatour.scrape_leaderboard(tournament_data[0])
+        else:
+            t = {}
+            t['name'] = tournament['trnName']['official']
+            t['id'] = tournament['permNum']
+            t['setup_year'] = tournament['year']
+            t['actual_year'] = datetime.datetime.now().year
+            t['par'] = 72
+            t['is_started'] = False
+            t['is_finished'] = False
+            t['current_round'] = 0
+            t['round_state'] = 'Not Started'
+            t['cut_line'] = None
+            t['players'] = {}
+
+            players_dict = pgatour.scrape_field(t['id'])
+            players = players_dict['a'] + players_dict['b'] + players_dict['c'] + players_dict['d']
+            for player in players:
+                name = player
+                t['players'][name] = {}
+                t['players'][name]['status'] = 'active'
+                t['players'][name]['penalty'] = 0
+                t['players'][name]['current_round'] = 1
+                t['players'][name]['thru'] = None
+                t['players'][name]['today'] = None
+                t['players'][name]['real_total'] = None
+                t['players'][name]['total'] = 0
+                t['players'][name]['total_strokes'] = None
+                t['players'][name]['day1'] = 0
+                t['players'][name]['day2'] = 0
+                t['players'][name]['day3'] = 0
+                t['players'][name]['day4'] = 0
+                t['players'][name]['rounds'] = []
+
+                for round in range(0,4):
+                    t['players'][name]['rounds'].append({})
+                    t['players'][name]['rounds'][round]['strokes'] = None
+                    t['players'][name]['rounds'][round]['tee_time'] = '---'
+
+
 
     return t
 
@@ -58,7 +99,7 @@ def get_current_tournament():
         current_week_tournament = next(tournament for tournament in current_year_pga_tour['trns']
                                        if tournament['date']['weekNumber'] == current_week
                                        and tournament['primaryEvent'] == 'Y')
-        if (dt.strptime(current_week_tournament['date']['end'], '%Y-%m-%d') > dt.now()):
+        if (dt.strptime(current_week_tournament['date']['end'], '%Y-%m-%d').date() >= dt.now().date()):
             current_week_verified = True
         else:
             current_week = str(int(current_week) + 1)
@@ -123,11 +164,8 @@ def parse_json(urls):
     data = []
     for url in urls:
         f = requests.get(url)
-        data.append(f.json())
+        if f.ok is True:
+            data.append(f.json())
 
     return data
-
-
-
-
 
