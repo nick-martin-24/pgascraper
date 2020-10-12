@@ -15,7 +15,7 @@ Tournament
 	- name: str  
 	- setup_year: str
 	- actual_year: int
-	- par: str  
+	- par: int  
 	- current_round: int  
 	- is_started: bool  
 	- is_finished: bool  
