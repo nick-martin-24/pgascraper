@@ -66,9 +66,6 @@ def scrape_leaderboard(json):
             t['players'][name]['day2'] += t['players'][name]['rounds'][1]['strokes'] - t['par']
             t['players'][name]['day3'] += t['players'][name]['today'] or 0
         else:
-            print('{}\n'.format(name))
-            print('{}\n'.format(t['players'][name]['rounds']))
-            #print(t['players'][name]['rounds'])
             t['players'][name]['day1'] += t['players'][name]['rounds'][0]['strokes'] - t['par']
             t['players'][name]['day2'] += (t['players'][name]['rounds'][1]['strokes'] or t['par']) - t['par']
             t['players'][name]['day3'] += (t['players'][name]['rounds'][2]['strokes'] or t['par']) - t['par']
