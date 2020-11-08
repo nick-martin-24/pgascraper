@@ -37,7 +37,7 @@ def scrape_leaderboard(json):
         t['players'][name]['thru'] = player['thru']
         t['players'][name]['today'] = player['today']
         t['players'][name]['real_total'] = player['total']
-        t['players'][name]['total'] = player['total'] + t['players'][name]['penalty']
+        t['players'][name]['total'] = (player['total'] or 0) + t['players'][name]['penalty']
         t['players'][name]['total_strokes'] = player['total_strokes']
         t['players'][name]['day1'] = 0
         t['players'][name]['day2'] = 0
@@ -54,7 +54,7 @@ def scrape_leaderboard(json):
                 t['players'][name]['rounds'][round['round_number'] - 1]['tee_time'] = '---'
 
         if t['current_round'] == 1:
-            t['players'][name]['day1'] = round['strokes'] - t['par']
+            t['players'][name]['day1'] = t['players'][name]['today'] or 0
         elif t['current_round'] == 2:
             t['players'][name]['day1'] += t['players'][name]['rounds'][0]['strokes'] - t['par']
             if t['round_state'] != 'Official':
@@ -66,8 +66,11 @@ def scrape_leaderboard(json):
             t['players'][name]['day2'] += t['players'][name]['rounds'][1]['strokes'] - t['par']
             t['players'][name]['day3'] += t['players'][name]['today'] or 0
         else:
+            print('{}\n'.format(name))
+            print('{}\n'.format(t['players'][name]['rounds']))
+            #print(t['players'][name]['rounds'])
             t['players'][name]['day1'] += t['players'][name]['rounds'][0]['strokes'] - t['par']
-            t['players'][name]['day2'] += t['players'][name]['rounds'][1]['strokes'] - t['par']
+            t['players'][name]['day2'] += (t['players'][name]['rounds'][1]['strokes'] or t['par']) - t['par']
             t['players'][name]['day3'] += (t['players'][name]['rounds'][2]['strokes'] or t['par']) - t['par']
             t['players'][name]['day4'] += t['players'][name]['today'] or 0
 
