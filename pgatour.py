@@ -1,4 +1,5 @@
 import json
+import urls
 import urllib
 import requests
 import datetime
@@ -76,9 +77,8 @@ def scrape_leaderboard(json):
 
 
 def scrape_field(id):
-    field_url = 'https://statdata.pgatour.com/r/{}/field.json'.format(id)
     # set player names from field of current tournament
-    f = requests.get(field_url)
+    f = requests.get(urls.field_url(id))
     parsed_json = f.json()
     players = parsed_json['Tournament']['Players']
     player_names = []
@@ -87,10 +87,7 @@ def scrape_field(id):
         player_names.append(' '.join((name[1], name[0])))
 
     # get players from owgr and set the top 60 who are in the field of current tournament
-    # url = 'http://www.owgr.com/ranking?pageNo=1&pageSize=300$country=All'
-    url = 'http://www.owgr.com/ranking?pageNo=1&pageSize=All&country=All'
-    # url = 'http://www.owgr.com/ranking'
-    h = urllib.request.urlopen(url)
+    h = urllib.request.urlopen(urls.owgr_url())
     html = h.read()
     soup = BeautifulSoup(html, 'html.parser')
 
