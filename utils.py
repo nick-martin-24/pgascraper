@@ -20,23 +20,24 @@ def scrape():
     tournament_data = parse_json(tournament_urls)
 
     t_name = tournament['trnName']['official']
-    if t_name == 'Masters Tournament':
-        t = masters.scrape(leaderboard)
+    parse_type = 'pgatour'
+    if parse_type != 'pgatour':
+        if t_name == 'Masters Tournament':
+            t = masters.scrape(leaderboard)
 
-    elif t_name == 'U.S. Open':
-        tee_times_url = 'https://gripapi-static-pd.usopen.com/gripapi/teetimes.json'
-        tee_times = parse_json(tee_times_url)
-        t = usopen.scrape(leaderboard, tee_times)
+        elif t_name == 'U.S. Open':
+            tee_times_url = 'https://gripapi-static-pd.usopen.com/gripapi/teetimes.json'
+            tee_times = parse_json(tee_times_url)
+            t = usopen.scrape(leaderboard, tee_times)
 
-    elif t_name == 'The Open Championship':
-        t = open.scrape(leaderboard)
+        elif t_name == 'The Open Championship':
+            t = open.scrape(leaderboard)
 
-    elif t_name == 'PGA Championship':
-        t = pga.scrape_leaderboard(leaderboard)
+        elif t_name == 'PGA Championship':
+            t = pga.scrape_leaderboard(leaderboard)
 
-    elif t_name == 'THE PLAYERS Championship':
-        t = players.scrape(leaderboard)
-
+        elif t_name == 'THE PLAYERS Championship':
+            t = players.scrape(leaderboard)
     else:
         if len(tournament_data) != 0:
             t = pgatour.scrape_leaderboard(tournament_data[0])
@@ -115,17 +116,19 @@ def get_urls(tournament):
     tournament_year = tournament['year']
     # tournament_name = 'U.S. Open'
     print('Processing json for {}\n'.format(tournament_name))
-    if tournament_name == 'Masters Tournament':
-        return
-    elif tournament_name == 'U.S. Open':
-        urls.append('https://gripapi-static-pd.usopen.com/gripapi/leaderboard.json')
-        urls.append('https://gripapi-static-pd.usopen.com/gripapi/teetimes.json')
-    elif tournament_name == 'The Open Championship':
-        return
-    elif tournament_name == 'PGA Championship':
-        return
-    elif tournament_name == 'THE PLAYERS Championship':
-        return
+    parse_type = 'pgatour'
+    if parse_type != 'pgatour':
+        if tournament_name == 'Masters Tournament':
+            return
+        elif tournament_name == 'U.S. Open':
+            urls.append('https://gripapi-static-pd.usopen.com/gripapi/leaderboard.json')
+            urls.append('https://gripapi-static-pd.usopen.com/gripapi/teetimes.json')
+        elif tournament_name == 'The Open Championship':
+            return
+        elif tournament_name == 'PGA Championship':
+            return
+        elif tournament_name == 'THE PLAYERS Championship':
+            return
     else:
         # init Chrome driver (Selenium)
         options = Options()

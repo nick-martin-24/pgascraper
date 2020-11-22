@@ -12,7 +12,7 @@ def scrape_leaderboard(json):
     t = {}
 
     # tournament data
-    t['name'] = leaderboard['tournament_name']
+    t['name'] = setup['tournament_in_schedule_file_name']
     t['id'] = leaderboard['tournament_id']
     t['setup_year'] = setup['setup_year']
     t['actual_year'] = datetime.datetime.now().year
@@ -62,8 +62,9 @@ def scrape_leaderboard(json):
             else:
                 t['players'][name]['day2'] += t['players'][name]['rounds'][1]['strokes'] - t['par']
         elif t['current_round'] == 3:
+            print(name)
             t['players'][name]['day1'] += t['players'][name]['rounds'][0]['strokes'] - t['par']
-            t['players'][name]['day2'] += t['players'][name]['rounds'][1]['strokes'] - t['par']
+            t['players'][name]['day2'] += (t['players'][name]['rounds'][1]['strokes']or t['par']) - t['par']
             t['players'][name]['day3'] += t['players'][name]['today'] or 0
         else:
             t['players'][name]['day1'] += t['players'][name]['rounds'][0]['strokes'] - t['par']
@@ -77,6 +78,7 @@ def scrape_leaderboard(json):
 
 def scrape_field(id):
     field_url = 'https://statdata.pgatour.com/r/{}/field.json'.format(id)
+    print(field_url)
     # set player names from field of current tournament
     f = requests.get(field_url)
     parsed_json = f.json()
