@@ -8,6 +8,14 @@ from scrapeutils import utils
 
 
 def scrape_leaderboard(json):
+    ''' populate tournament data variable with the data from
+        the parsed leaderboard url json.
+
+    :param json: parsed json of current tournament leaderboard url
+    :type json: dict
+
+    :returns: dictionary with tournament data extracted from parsed json
+    '''
     setup = json['debug']
     leaderboard = json['leaderboard']
     t = {}
@@ -77,6 +85,13 @@ def scrape_leaderboard(json):
 
 
 def scrape_field(id):
+    ''' parse field url and extract players listed to play in current tournament 
+
+    :param id: tournament code for current tournament
+    :type id: str/int?
+
+    :returns: list of player names found in field for current tournament
+    '''
     # set player names from field of current tournament
     f = requests.get(urls.field_url(id))
     parsed_json = f.json()
@@ -86,31 +101,5 @@ def scrape_field(id):
         name = item['PlayerName'].split(', ')
         player_names.append(' '.join((name[1], name[0])))
 
-    # get players from owgr and set the top 60 who are in the field of current tournament
-    h = urllib.request.urlopen(urls.owgr_url())
-    html = h.read()
-    soup = BeautifulSoup(html, 'html.parser')
-
-    tr = soup.find_all('tr')
-    tr = tr[1:]
-    owgr = []
-    count = 0
-    for item in tr:
-        name = item.contents[9].contents[0].contents[0]
-        if name[0:6] == 'Rafael':
-            name = 'Rafa Cabrera Bello'
-        if name == 'Peter Uihlein':
-            continue
-        if name in player_names and count < 60 and name != 'Scottie Scheffler':
-            owgr.append(name)
-            count += 1
-
-    # define tiers
-    field = {}
-    field['a'] = owgr[0:10]
-    field['b'] = owgr[10:25]
-    field['c'] = owgr[25:40]
-    field['d'] = owgr[40:]
-
-    return field
+    return player_names
 
