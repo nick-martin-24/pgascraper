@@ -2,7 +2,7 @@ import urls
 import requests
 import datetime
 import collections
-from scrapeutils import pgatour
+from scrapeutils.golf import pgatour
 from datetime import datetime as dt
 
 
@@ -162,7 +162,7 @@ def parse_json(urls):
     return data
 
 
-def generate_field(player_names)
+def generate_field(player_names):
     ''' compare player names returned from field parsing for given tournament
         with the owgr. Take the top 60 and split into groups.
 
