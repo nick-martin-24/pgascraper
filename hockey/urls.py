@@ -14,6 +14,9 @@ def schedule():
 def game(game_id):
     return '{}/game/{}/feed/live'.format(base(),game_id)
 
+def people(person_id):
+    return '{}/people/{}'.format(base(),person_id)
+
 def leaderboard(tournament):
     ''' create url for current tournament data. need to determine unique user and acl id
         for session created when accessing pga site.
