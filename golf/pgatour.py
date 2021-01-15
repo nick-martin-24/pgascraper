@@ -1,10 +1,9 @@
 import json
-import urls
 import urllib
 import requests
 import datetime
 from bs4 import BeautifulSoup
-from scrapeutils.golf import utils
+from scrapeutils.golf import utils, urls
 
 
 def scrape_leaderboard(json):
