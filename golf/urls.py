@@ -18,6 +18,9 @@ def basic_leaderboard():
 def base():
     return 'https://statdata.pgatour.com/r'
 
+def masters_config_web():
+    return https://www.masters.com/en_US/json/gen/config_web.json
+
 def leaderboard(tournament):
     ''' create url for current tournament data. need to determine unique user and acl id
         for session created when accessing pga site.
