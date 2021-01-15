@@ -4,7 +4,7 @@ import urllib
 import requests
 import datetime
 from bs4 import BeautifulSoup
-from scrapeutils import utils
+from scrapeutils.golf import utils
 
 
 def scrape_leaderboard(json):
