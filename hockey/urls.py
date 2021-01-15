@@ -1,25 +1,18 @@
+from datetime import datetime as d
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
 
-
-def field(tournament_id):
-    return 'https://statdata.pgatour.com/r/{}/field.json'.format(tournament_id)
-
-def owgr():
-    return 'http://www.owgr.com/ranking?pageNo=1&pageSize=All&country=All'
+def base():
+    return 'http://statsapi.web.nhl.com/api/v1'
 
 def schedule():
-    return 'https://statdata.pgatour.com/r/current/schedule-v2.json'
+    date_i = d.now().strftime('%Y-%m-%d')
+    date_f = date_i
+    return '{}/schedule?startDate={}&endDate={}'.format(base(),date_i, date_f)
 
-def basic_leaderboard():
-    return 'https://www.pgatour.com/leaderboard.html'
-
-def base():
-    return 'https://statdata.pgatour.com/r'
-
-def masters_config_web():
-    return https://www.masters.com/en_US/json/gen/config_web.json
+def game(game_id):
+    return '{}/game/{}/feed/live'.format(base(),game_id)
 
 def leaderboard(tournament):
     ''' create url for current tournament data. need to determine unique user and acl id
