@@ -3,6 +3,8 @@ from datetime import datetime as dt
 import requests
 import collections
 import math
+import matplotlib.pyplot as plt
+from PIL import Image
 
 
 def get_schedule():
@@ -39,6 +41,7 @@ def summarize_game(game_id):
     events = {}
     game = get_game_by_id(game_id)
     plays = game['liveData']['plays']['allPlays']
+    fig, ax, xscale, yscale = make_rink()
     for play in plays:
         event = play['result']['event']
         if event not in events.keys():
@@ -47,9 +50,16 @@ def summarize_game(game_id):
             events[event] += 1
         if event == 'Goal':
             print('!!! GOAL !!! {} scored from {}'.format(play['players'][0]['player']['fullName'], play['players'][1]['player']['fullName']))
+            x = play['coordinates']['x']*xscale
+            y = play['coordinates']['y']*yscale
+            ax.scatter(x,y)
+            ax.annotate(play['players'][0]['player']['fullName'],(x,y))
 
     for event in events:
         print('{}: {}'.format(event, events[event]))
+    #plt.xlim([-100,100])
+    #plt.ylim([-42.5,42.5])
+    fig.show()
 
 def get_person_by_id(person_id):
     ''' Get information for person given by person_id
@@ -75,3 +85,22 @@ def get_shot_distance(x,y):
     goal_location = (89,0)
     shot_location = (abs(x),y)
     return math.dist(shot_location,goal_location)
+
+def make_rink():
+    fig = plt.figure(figsize=(12,7))
+    ax = fig.add_subplot(111)
+    ax.set_position([0,0,1,1])
+
+
+    I = Image.open('/Users/nickmartin/projects/python/scrapeutils/hockey/NHL_Hockey_Rink.png')
+    left = 46
+    top = 117
+    right = I.width - 37
+    bottom = I.height - 132
+    I = I.crop((left, top, right, bottom))
+    #I = I.resize((int(I.width*2),int(I.height*2)), Image.ANTIALIAS)
+    width, height = I.size
+    xscale = width/200
+    yscale = height/85
+    ax.imshow(I, extent=[-width/2, width/2, -height/2, height/2])
+    return fig, ax, xscale, yscale
