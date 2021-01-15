@@ -1,8 +1,7 @@
-import urls
 import requests
 import datetime
 import collections
-from scrapeutils.golf import pgatour
+from scrapeutils.golf import pgatour, urls
 from datetime import datetime as dt
 
 
