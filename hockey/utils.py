@@ -36,9 +36,12 @@ def get_game_by_id(game_id):
     '''
     return requests.get(urls.game(game_id)).json()
 
-def summarize_game(game_id):
+def summarize_game(game_id,stats='Goal'):
     ''' Print out event types and number of each events. '''
     events = {}
+    colors = {'Philadelphia Flyers': 'orange', 'Pittsburgh Penguins': 'yellow'}
+    shot_colors = {'Goal': 'green','Shot': 'blue', 'Missed Shot': 'red', 'Blocked Shot': 'yellow'}
+    period_scale = {1: 1, 2: -1, 3: 1}
     game = get_game_by_id(game_id)
     plays = game['liveData']['plays']['allPlays']
     fig, ax, xscale, yscale = make_rink()
@@ -48,18 +51,21 @@ def summarize_game(game_id):
             events[event] = 1
         else:
             events[event] += 1
-        if event == 'Goal':
-            print('!!! GOAL !!! {} scored from {}'.format(play['players'][0]['player']['fullName'], play['players'][1]['player']['fullName']))
-            x = play['coordinates']['x']*xscale
-            y = play['coordinates']['y']*yscale
-            ax.scatter(x,y)
-            ax.annotate(play['players'][0]['player']['fullName'],(x,y))
+        if event in stats:
+            x = play['coordinates']['x'] * xscale * (period_scale[play['about']['period']])
+            y = play['coordinates']['y'] * yscale + (period_scale[play['about']['period']])
+            ax.scatter(x,y,label=event,color=shot_colors[event],s=300,linewidth=3,edgecolors='black')
+            #if event == 'Goal':
+                #ax.annotate(play['players'][0]['player']['fullName'],(x,y))
 
+    handles, labels = ax.get_legend_handles_labels()
+    by_label = dict(zip(labels, handles))
+    plt.legend(by_label.values(), by_label.keys())
+    plt.text(0.13, 1.01, game['gameData']['teams']['home']['name'], fontsize=14, weight='bold', transform=plt.gca().transAxes)
+    plt.text(0.69, 1.01, game['gameData']['teams']['away']['name'], fontsize=14, weight='bold', transform=plt.gca().transAxes)
     for event in events:
         print('{}: {}'.format(event, events[event]))
-    #plt.xlim([-100,100])
-    #plt.ylim([-42.5,42.5])
-    fig.show()
+    plt.show()
 
 def get_person_by_id(person_id):
     ''' Get information for person given by person_id
