@@ -53,7 +53,7 @@ def summarize_game(game_id,stats='Goal'):
             events[event] += 1
         if event in stats:
             x = play['coordinates']['x'] * xscale * (period_scale[play['about']['period']])
-            y = play['coordinates']['y'] * yscale + (period_scale[play['about']['period']])
+            y = play['coordinates']['y'] * yscale * (period_scale[play['about']['period']])
             ax.scatter(x,y,label=event,color=shot_colors[event],s=300,linewidth=3,edgecolors='black')
             #if event == 'Goal':
                 #ax.annotate(play['players'][0]['player']['fullName'],(x,y))
