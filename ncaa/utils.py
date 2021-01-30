@@ -55,6 +55,14 @@ def get_seed_by_team(team):
             team_type = get_team_type(team,game)
             return int(game['game'][team_type]['seed'])
 
+def get_bracket_rounds():
+    bracket_rounds = []
+    t = get_tournament()
+    for game in t['games']:
+        if game['game']['bracketRound'] not in bracket_rounds:
+            bracket_rounds.append(game['game']['bracketRound']
+    return bracketRounds
+
 def in_game(team,game):
     ''' Determine if a team is playing in current game.
 
