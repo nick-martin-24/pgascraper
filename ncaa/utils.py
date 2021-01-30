@@ -56,6 +56,10 @@ def get_seed_by_team(team):
             return int(game['game'][team_type]['seed'])
 
 def get_bracket_rounds():
+    ''' Get names of bracket rounds in tournament.
+
+        :returns: list of strings for bracket rounds
+    '''
     bracket_rounds = []
     t = get_tournament()
     for game in t['games']:
