@@ -1,7 +1,5 @@
 from scrapeutils.hockey import urls
-from datetime import datetime as dt
 import requests
-import collections
 import math
 import matplotlib.pyplot as plt
 from PIL import Image
@@ -10,14 +8,14 @@ from PIL import Image
 def get_schedule():
     ''' Get schedule information for current date.
 
-    :returns: dict
+        :returns: dict
     '''
     return requests.get(urls.schedule()).json()
 
 def get_todays_games():
     ''' Get information for all games on current date.
     
-    :returns: list of dicts
+        :returns: list of dicts
     '''
     return requests.get(urls.schedule()).json()['dates'][0]['games']
 
@@ -32,15 +30,26 @@ def print_today_summary():
 def get_game_by_id(game_id):
     ''' Get information for game given by game_id
 
-    :returns: dict
+        :param game_id: ID of game for which to retrieve data
+        : type game_id: int
+
+        :returns: dict
     '''
     return requests.get(urls.game(game_id)).json()
 
-def summarize_game(game_id,stats='Goal'):
-    ''' Print out event types and number of each events. '''
+def plot_game_events(game_id,stats=['Goal']):
+    ''' Display event locations for each team on rink image.
+        For shot-related events, results are color coded by result (on net, missed, blocked, goal)
+
+        :param game_id: ID of game of interest (i.e. from print_today_summary())
+        : type game_id: int
+        :param stats:   type of stat/event to display
+        : type stats:   list of strings
+
+        :returns: a plot of events displayed on rink image
+    '''
     events = {}
-    colors = {'Philadelphia Flyers': 'orange', 'Pittsburgh Penguins': 'yellow'}
-    shot_colors = {'Goal': 'green','Shot': 'blue', 'Missed Shot': 'red', 'Blocked Shot': 'yellow'}
+    event_colors = {'Goal': 'green','Shot': 'blue', 'Missed Shot': 'red', 'Blocked Shot': 'yellow'}
     period_scale = {1: 1, 2: -1, 3: 1}
     game = get_game_by_id(game_id)
     plays = game['liveData']['plays']['allPlays']
@@ -54,7 +63,7 @@ def summarize_game(game_id,stats='Goal'):
         if event in stats:
             x = play['coordinates']['x'] * xscale * (period_scale[play['about']['period']])
             y = play['coordinates']['y'] * yscale * (period_scale[play['about']['period']])
-            ax.scatter(x,y,label=event,color=shot_colors[event],s=300,linewidth=3,edgecolors='black')
+            ax.scatter(x,y,label=event,color=event_colors[event],s=300,linewidth=3,edgecolors='black')
             #if event == 'Goal':
                 #ax.annotate(play['players'][0]['player']['fullName'],(x,y))
 
@@ -70,14 +79,17 @@ def summarize_game(game_id,stats='Goal'):
 def get_person_by_id(person_id):
     ''' Get information for person given by person_id
 
-    :returns: dict
+        :param person_id: ID of person of which to retrieve data
+        : type person_id: int
+
+        :returns: dict
     '''
     return requests.get(urls.people(person_id)).json()
 
 def flyers_game_today():
     ''' Determine if there is a flyers game today.
 
-    :returns: bool
+        :returns: bool
     '''
     flyers_play = False
     for game in get_todays_games():
@@ -88,11 +100,31 @@ def flyers_game_today():
     return flyers_play
 
 def get_shot_distance(x,y):
+    ''' Determine distance from shot location to goal
+        :info: goal line 11 ft from end boards (+/- 100 ft in x direction from center ice
+               all calculations to y=0 on goal line, not necessarily the point of entry
+
+        :param x: X coordinate of event
+        : type x: float
+        :param y: Y coordinate of event
+        : type y: float
+
+        :returns: float; distance from event location to goal
+    '''
     goal_location = (89,0)
     shot_location = (abs(x),y)
     return math.dist(shot_location,goal_location)
 
 def make_rink():
+    ''' Create figure with a hockey rink as the background.
+        Normalizes the size of the image to the dimensions of a hockey rink
+
+
+        :returns: figure handle
+                  axes handle
+                  xscale; float
+                  yscale; float
+    '''
     fig = plt.figure(figsize=(12,7))
     ax = fig.add_subplot(111)
     ax.set_position([0,0,1,1])
@@ -104,7 +136,6 @@ def make_rink():
     right = I.width - 37
     bottom = I.height - 132
     I = I.crop((left, top, right, bottom))
-    #I = I.resize((int(I.width*2),int(I.height*2)), Image.ANTIALIAS)
     width, height = I.size
     xscale = width/200
     yscale = height/85
