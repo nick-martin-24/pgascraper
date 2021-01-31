@@ -95,3 +95,17 @@ def get_team_type(team,game):
         return 'home'
     return 'away'
 
+def won_game(team,game):
+    ''' Determine if given team won given game.
+
+        :param team: team to check if playing in game
+        : type team: str
+        :param game: game to check
+        : type game: dict
+
+        :returns: bool
+    '''
+    if game['game'][get_team_type(team, game)]['winner']:
+        return True
+    return False
+
