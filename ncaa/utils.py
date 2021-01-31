@@ -64,7 +64,7 @@ def get_bracket_rounds():
     t = get_tournament()
     for game in t['games']:
         if game['game']['bracketRound'] not in bracket_rounds:
-            bracket_rounds.append(game['game']['bracketRound']
+            bracket_rounds.append(game['game']['bracketRound'])
     return bracketRounds
 
 def in_game(team,game):
