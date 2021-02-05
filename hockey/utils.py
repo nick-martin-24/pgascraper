@@ -1,4 +1,5 @@
 from scrapeutils.hockey import urls
+import os
 import requests
 import math
 import matplotlib.pyplot as plt
@@ -130,7 +131,7 @@ def make_rink():
     ax.set_position([0,0,1,1])
 
 
-    I = Image.open('/Users/nickmartin/projects/python/scrapeutils/hockey/NHL_Hockey_Rink.png')
+    I = Image.open('{}/projects/python/scrapeutils/hockey/NHL_Hockey_Rink.png'.format(os.environ['HOME'])
     left = 46
     top = 117
     right = I.width - 37

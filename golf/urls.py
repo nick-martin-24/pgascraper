@@ -1,3 +1,4 @@
+import os
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
@@ -41,7 +42,7 @@ def leaderboard(tournament):
     options.headless = True
     cap = DesiredCapabilities.CHROME
     cap['goog:loggingPrefs'] = {'performance': 'ALL'}
-    driver = webdriver.Chrome('/Users/nickmartin/projects/python/scrapeutils/chromedriver', desired_capabilities=cap, options=options)
+    driver = webdriver.Chrome('{}/projects/python/scrapeutils/chromedriver'.format(os.environ['HOME'], desired_capabilities=cap, options=options)
 
     # record and parse performance log
     driver.get(basic_leaderboard())
