@@ -42,7 +42,7 @@ def leaderboard(tournament):
     options.headless = True
     cap = DesiredCapabilities.CHROME
     cap['goog:loggingPrefs'] = {'performance': 'ALL'}
-    driver = webdriver.Chrome('{}/projects/python/scrapeutils/chromedriver'.format(os.environ['HOME'], desired_capabilities=cap, options=options)
+    driver = webdriver.Chrome('{}/projects/python/scrapeutils/chromedriver'.format(os.environ['HOME']), desired_capabilities=cap, options=options)
 
     # record and parse performance log
     driver.get(basic_leaderboard())
