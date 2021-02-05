@@ -1,6 +1,8 @@
+import urllib
 import requests
 import datetime
 import collections
+from bs4 import BeautifulSoup
 from scrapeutils.golf import pgatour, urls
 from datetime import datetime as dt
 
@@ -170,7 +172,7 @@ def generate_field(player_names):
 
     :returns: dictionary with 4 keys corresponding to lists of golfers in given group
     '''
-    h = urllib.request.urlopen(urls.owgr_url())
+    h = urllib.request.urlopen(urls.owgr())
     html = h.read()
     soup = BeautifulSoup(html, 'html.parser')
 
@@ -195,5 +197,5 @@ def generate_field(player_names):
     field['c'] = owgr[25:40]
     field['d'] = owgr[40:]
 
-    return field['a'] + field['b'] + field['c'] + field['d']
+    return field
 
