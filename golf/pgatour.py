@@ -93,7 +93,7 @@ def scrape_field(id):
     :returns: list of player names found in field for current tournament
     '''
     # set player names from field of current tournament
-    f = requests.get(urls.field_url(id))
+    f = requests.get(urls.field(id))
     parsed_json = f.json()
     players = parsed_json['Tournament']['Players']
     player_names = []
