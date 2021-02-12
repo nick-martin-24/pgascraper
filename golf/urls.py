@@ -50,15 +50,14 @@ def leaderboard(tournament):
     driver.quit()
 
     log = []
-    message = 'message.json'
+    acl_str = '~acl=*~hmac='
     for item in performance_log:
-        if base() in item['message'] and message in item['message']:
+        if acl_str in item['message']:
             log.append(item['message'])
 
 
     id_str = 'userTrackingId=exp='
     id_idx = log[0].find(id_str)
-    acl_str = '~acl=*~hmac='
     acl_idx = log[0].find(acl_str)
     end_acl_str = '"},"requestId'
     end_acl_idx = log[0].find(end_acl_str)
