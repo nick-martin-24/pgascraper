@@ -41,7 +41,7 @@ def get_team_names(name_type='short'):
             team_names.append(team2)
     return team_names
 
-def get_seed_by_team(team):
+def get_seed(team):
     ''' Get seed for team
 
         :param team: team for which to retrieve seed
